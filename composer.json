@@ -1,0 +1,26 @@
+{
+  "name": "mhndev/yii2-media",
+  "description": "Media Manipulation and storage control (limitation) in Yii2",
+  "type": "library",
+  "keywords": ["yii2","media manipulation","image", "upload"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "majid abdolhosseini",
+      "email": "majid8911303@gmail.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "*",
+    "mhndev/media": "*"
+  },
+
+  "autoload": {
+    "psr-4": {
+      "mhndev\\yii2Media\\": "src/"
+    }
+  },
+
+  "minimum-stability": "dev"
+
+}
