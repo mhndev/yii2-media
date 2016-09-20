@@ -1,7 +1,9 @@
 <?php
 
 namespace mhndev\yii2Media\Traits;
-use mhndev\yii2Media\Media;
+
+use mhndev\yii2Media\Models\Media;
+use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -11,10 +13,18 @@ use yii\db\ActiveRecord;
 trait EntityTrait
 {
 
-
+    /**
+     * @var string
+     */
     protected static $mediaClass;
 
-    protected static $primaryKey;
+    public function init()
+    {
+        parent::init();
+
+        $config = include Yii::$aliases['@config'].DIRECTORY_SEPARATOR.'media.php';
+        self::$mediaClass = $config['mediaClass'];
+    }
 
     /**
      * @param $mediaMimeType
@@ -23,11 +33,14 @@ trait EntityTrait
      */
     public function getMediaByType($mediaMimeType, $mediaType)
     {
-        return self::$mediaClass->find->where([
-            'mime_type' => $mediaMimeType,
-            'entity'    => static::class,
-            'entity_id' => $this->{self::$primaryKey},
-            'type'      => $mediaType
+        /** @var ActiveRecord $mediaClass */
+        $mediaClass = self::$mediaClass;
+
+        return $mediaClass->find()->where([
+            ['=', 'mime_type' , $mediaMimeType],
+            ['=', 'entity'    , static::class],
+            ['=', 'entity_id' , $this->{$mediaClass::primaryKey()}],
+            ['=', 'type'      , $mediaType]
         ])->all();
     }
 
@@ -37,65 +50,142 @@ trait EntityTrait
      */
     public function getMedia()
     {
-        return self::$mediaClass->find->where([
-            'entity'    => static::class,
-            'entity_id' => $this->{self::$primaryKey},
+        /** @var ActiveRecord $mediaClass */
+        $mediaClass = self::$mediaClass;
+
+        return $mediaClass->find()->where([
+            ['=', 'entity', static::class],
+            ['=', 'entity_id', $this->{$mediaClass::primaryKey()}],
         ])->all();
     }
 
 
     /**
+     * attach media to an entity which takes owner class and owner identifier as arguments
+     *
      * @param $mediaMimeType
      * @param $mediaType
      * @param $mediaPath
+     * @param $owner
+     * @param $owner_id
      * @return mixed
      */
-    public function attachMedia($mediaMimeType, $mediaType, $mediaPath)
+    public function attachMedia($mediaMimeType, $mediaType, $mediaPath, $owner, $owner_id)
     {
-        /** @var ActiveRecord $mediaObject */
+        /** @var Media $mediaObject */
         $mediaObject = new self::$mediaClass();
 
         $mediaObject->type = $mediaType;
-        $mediaObject->mimeType = $mediaMimeType;
+        $mediaObject->mime_type = $mediaMimeType;
         $mediaObject->path = $mediaPath;
+        $mediaObject->owner = $owner;
+        $mediaObject->owner_id = $owner_id;
+        $mediaObject->entity = static::class;
+        $mediaObject->entity_id = $this->id;
 
         $mediaObject->save();
 
         return $mediaObject;
     }
 
+
     /**
+     * @param array $media
+     * @param bool $ownerEqualsLoggedInUser
+     */
+    public function attachMultipleMedia(array $media, $ownerEqualsLoggedInUser = true)
+    {
+        $result = [];
+
+        if($ownerEqualsLoggedInUser){
+
+            $ownerClass = get_class(Yii::$app->user->identity);
+            $owner_id   = Yii::$app->user->identity->id;
+
+            foreach ($media as $record){
+                $result[] = array_merge($record, [
+                    'entity' => static::class,
+                    'entity_id'=> $this->id,
+                    'owner' => $ownerClass,
+                    'owner_id' => $owner_id
+                ]);
+            }
+        }
+        else{
+            foreach ($media as $record){
+                $result[] = array_merge($record, [
+                    'entity' => static::class,
+                    'entity_id'=> $this->id
+                ]);
+            }
+        }
+
+
+        $this->createMany($result);
+    }
+
+
+    /**
+     * @param array $data
+     * @return mixed|void
+     * @throws \Exception
+     */
+    protected function createMany(array $data)
+    {
+        if($this->depth($data) < 2){
+            throw new \Exception;
+        }
+
+        $modelClassName = self::$mediaClass;
+
+        foreach ($data as $record){
+            /** @var ActiveRecord $model */
+            $model = new $modelClassName;
+
+            foreach($record as $key => $value){
+                $model->{$key} = $value;
+            }
+
+            if(!$model->validate()){
+                break;
+            }
+
+        }
+
+        Yii::$app->db->createCommand()
+            ->batchInsert($modelClassName::tableName(),
+                ['entity','size','entity_id', 'owner', 'owner_id', 'type', 'file_type', 'mime_type', 'path', 'link'],
+                $data)->execute();
+    }
+
+
+    /**
+     *
+     * attach media to an entity which logged in user is it's owner
+     *
      * @param $mediaMimeType
      * @param $mediaType
      * @param $mediaPath
-     * @return mixed
+     * @return ActiveRecord
      */
-    public function detachMedia($mediaMimeType, $mediaType, $mediaPath)
+    public function attachMediaLoggedInUser($mediaMimeType, $mediaType, $mediaPath)
     {
-        /** @var ActiveRecord $mediaObject */
-        $mediaObject = self::$mediaClass->where([
-            'mime_type' => $mediaMimeType,
-            'type'      => $mediaType,
-            'path'      => $mediaPath
-        ])->one();
+        /** @var Media $mediaObject */
+        $mediaObject = new self::$mediaClass();
 
-        $mediaObject->delete();
+        $mediaObject->type = $mediaType;
+        $mediaObject->mime_type = $mediaMimeType;
+        $mediaObject->path = $mediaPath;
+        $mediaObject->owner = get_class(Yii::$app->user->identity);
+        $mediaObject->owner_id = Yii::$app->user->identity->id;
+        $mediaObject->entity = static::class;
+        $mediaObject->entity_id = $this->id;
+
+        $mediaObject->save();
 
         return $mediaObject;
     }
 
-    /**
-     * @param $mediaId
-     * @return mixed
-     */
-    public function detachMediaById($mediaId)
-    {
-        $mediaObject = self::$mediaClass->find()->one(['id'=>$mediaId]);
-
-        $mediaObject->delete();
-
-        return $mediaObject;
-    }
 
 
     /**
@@ -103,10 +193,16 @@ trait EntityTrait
      */
     public function detachAllMedia()
     {
-        return self::$mediaClass->find->where([
-            'entity'    => static::class,
-            'entity_id' => $this->{self::$primaryKey},
-        ])->delete();
+        /** @var ActiveRecord $mediaClass */
+        $mediaClass = self::$mediaClass;
+
+        return $mediaClass::deleteAll([
+            'and',
+            ['=', 'entity', static::class ],
+            ['=', 'entity_id', $this->{$mediaClass::primaryKey()} ]
+        ]);
+
+
     }
 
 
@@ -118,15 +214,40 @@ trait EntityTrait
      */
     public function detachAllMediaByType($mediaMimeType, $mediaType)
     {
-        return self::$mediaClass->find->where([
-            'mime_type' => $mediaMimeType,
-            'entity'    => static::class,
-            'entity_id' => $this->{self::$primaryKey},
-            'type'      => $mediaType
-        ])->delete();
+        /** @var ActiveRecord $mediaClass */
+        $mediaClass = self::$mediaClass;
+
+        return $mediaClass::deleteAll([
+            'and',
+            ['=', 'entity', static::class ],
+            ['=', 'entity_id', $this->{$mediaClass::primaryKey()} ],
+            ['=', 'mime_type', $mediaMimeType],
+            ['=', 'type', $mediaType],
+        ]);
     }
 
 
+
+    /**
+     * @param array $array
+     * @return int
+     */
+    protected function depth(array $array)
+    {
+        $max_depth = 1;
+
+        foreach ($array as $value) {
+            if (is_array($value)) {
+                $depth = depth($value) + 1;
+
+                if ($depth > $max_depth) {
+                    $max_depth = $depth;
+                }
+            }
+        }
+
+        return $max_depth;
+    }
     /**
      * @param $mediaMimeType
      * @param $mediaType
