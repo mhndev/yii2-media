@@ -90,8 +90,42 @@ trait EntityTrait
      */
     public function detachMediaById($mediaId)
     {
+        $mediaObject = self::$mediaClass->find()->one(['id'=>$mediaId]);
 
+        $mediaObject->delete();
+
+        return $mediaObject;
     }
+
+
+    /**
+     * @return mixed
+     */
+    public function detachAllMedia()
+    {
+        return self::$mediaClass->find->where([
+            'entity'    => static::class,
+            'entity_id' => $this->{self::$primaryKey},
+        ])->delete();
+    }
+
+
+
+    /**
+     * @param $mediaMimeType
+     * @param $mediaType
+     * @return mixed
+     */
+    public function detachAllMediaByType($mediaMimeType, $mediaType)
+    {
+        return self::$mediaClass->find->where([
+            'mime_type' => $mediaMimeType,
+            'entity'    => static::class,
+            'entity_id' => $this->{self::$primaryKey},
+            'type'      => $mediaType
+        ])->delete();
+    }
+
 
     /**
      * @param $mediaMimeType
@@ -115,23 +149,4 @@ trait EntityTrait
 
     }
 
-    /**
-     * @return mixed
-     */
-    public function detachAllMedia()
-    {
-
-    }
-
-
-
-    /**
-     * @param $mediaMimeType
-     * @param $mediaType
-     * @return mixed
-     */
-    public function detachAllMediaByType($mediaMimeType, $mediaType)
-    {
-
-    }
 }
