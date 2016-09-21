@@ -64,14 +64,14 @@ class MediaController extends Controller
 
 
     /**
-     *
+     * @return array|string
      */
     public function actionUploadAndAttachMedia()
     {
         $data = Yii::$app->request->post();
         $model = $data['entity']::findOne($data['entity_id']);
-        Media::storeAndAttach('media', $data['type'], $model);
 
+        return ['records'=>Media::storeAndAttach('media', $data['type'], $model)];
     }
 
 

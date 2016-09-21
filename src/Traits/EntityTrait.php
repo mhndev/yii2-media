@@ -93,6 +93,7 @@ trait EntityTrait
     /**
      * @param array $media
      * @param bool $ownerEqualsLoggedInUser
+     * @return mixed|void
      */
     public function attachMultipleMedia(array $media, $ownerEqualsLoggedInUser = true)
     {
@@ -122,7 +123,7 @@ trait EntityTrait
         }
 
 
-        $this->createMany($result);
+        return $this->createMany($result);
     }
 
 
@@ -159,7 +160,7 @@ trait EntityTrait
 
         }
 
-        Yii::$app->db->createCommand()
+        return Yii::$app->db->createCommand()
             ->batchInsert($modelClassName::tableName(), $model->attributes() , $rows)->execute();
     }
 

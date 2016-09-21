@@ -120,7 +120,7 @@ class Media
 
 
         /** @var iEntity $model */
-        $model->attachMultipleMedia($data, false);
+        return $model->attachMultipleMedia($data, false);
     }
 
     /**
@@ -135,13 +135,16 @@ class Media
 
     /**
      * @param string $media_id
+     * @return mixed
      */
     public static function markMediaAsDefaultByMediaId($media_id)
     {
-        /** @var iMedia $media */
-        $media = self::mediaClass()->findOne($media_id);
+        $mediaClass = self::mediaClass();
 
-        $media->markAsDefault();
+        /** @var iMedia $media */
+        $media = $mediaClass::findOne($media_id);
+
+        return $media->markAsDefault();
     }
 
 
