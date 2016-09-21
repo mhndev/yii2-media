@@ -4,6 +4,7 @@ namespace mhndev\yii2Media\Components;
 
 use mhndev\media\UploadFile;
 use mhndev\yii2Media\Interfaces\iEntity;
+use mhndev\yii2Media\Interfaces\iMedia;
 use Yii;
 
 /**
@@ -12,7 +13,10 @@ use Yii;
  */
 class Media
 {
-
+    /**
+     * @var array
+     */
+    protected static $config;
 
     /**
      * @var string
@@ -24,6 +28,38 @@ class Media
      * @var string
      */
     protected static $userClass;
+
+
+    /**
+     * @return mixed
+     */
+    protected static function mediaClass()
+    {
+        return self::config()['mediaClass'];
+    }
+
+    /**
+     * @return mixed
+     */
+    protected static function userClass()
+    {
+        return self::config()['userClass'];
+    }
+
+    /**
+     * @return array
+     */
+    public static function config()
+    {
+        if(self::$config)
+            return self::$config;
+
+        $config = include Yii::$aliases['@config'].DIRECTORY_SEPARATOR.'media.php';
+
+        self::$mediaClass = $config['mediaClass'];
+        self::$userClass = $config['userClass'];
+    }
+
 
     /**
      * @param $inputName
@@ -42,12 +78,7 @@ class Media
             throw new \Exception('Model should be instance of '.iEntity::class);
         }
 
-        $config = include Yii::$aliases['@config'].DIRECTORY_SEPARATOR.'media.php';
-        self::$mediaClass = $config['mediaClass'];
-        self::$mediaClass = $config['userClass'];
-
-
-        UploadFile::config($config['formats']);
+        UploadFile::config(self::config());
 
         $return = UploadFile::store($inputName, $type);
 
@@ -60,8 +91,8 @@ class Media
                 $item['size'] = (float) $item['size'];
                 $data[] = array_merge($item, [
                     'entity'=>get_class($model),
-                    'entity_id'=>$model->id,
-                    'owner'=> self::$userClass,
+                    'entity_id'=>$model->{$model->primaryKey()},
+                    'owner'=> self::userClass(),
                     'owner_id'=>Yii::$app->user->identity->id,
                     'link'=>null,
                     'type'=>$type
@@ -75,7 +106,7 @@ class Media
                 $item['size'] = (float) $item['size'];
                 $data[] = array_merge($item, [
                     'entity'=>get_class($model),
-                    'entity_id'=>$model->id,
+                    'entity_id'=>$model->{$model->primaryKey()},
                     'owner'=> $ownerClass,
                     'owner_id'=>$ownerId,
                     'link'=>null,
@@ -86,10 +117,29 @@ class Media
 
 
 
-
-
         /** @var iEntity $model */
         $model->attachMultipleMedia($data, false);
+    }
+
+    /**
+     * @param iMedia $media
+     * @return mixed
+     */
+    public static function markMediaAsDefault(iMedia $media)
+    {
+        return $media->markAsDefault();
+    }
+
+
+    /**
+     * @param string $media_id
+     */
+    public static function markMediaAsDefaultByMediaId($media_id)
+    {
+        /** @var iMedia $media */
+        $media = self::mediaClass()->findOne($media_id);
+
+        $media->markAsDefault();
     }
 
 

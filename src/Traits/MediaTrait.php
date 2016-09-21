@@ -101,6 +101,12 @@ trait MediaTrait
      */
     public function markAsDefault()
     {
+        static::updateAll(['default' => 0], [
+            'and',
+            ['=','entity', $this->entity],
+            ['=', 'entity_id', $this->entity_id],
+        ]);
+
         $this->default = 1;
         $this->save();
 
@@ -112,7 +118,7 @@ trait MediaTrait
      */
     public function unMarkAsDefault()
     {
-        $this->default = 1;
+        $this->default = 0;
         $this->save();
 
         return $this;

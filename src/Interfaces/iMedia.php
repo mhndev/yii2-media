@@ -31,7 +31,13 @@ interface iMedia
     public function setEntityByTypeAndIdentifier($type, $id);
 
 
+    /**
+     * @return mixed
+     */
     public function markAsDefault();
 
+    /**
+     * @return mixed
+     */
     public function unMarkAsDefault();
 }
