@@ -7,8 +7,9 @@ use yii\db\ActiveRecord;
  * @property string entity
  * @property string|integer entity_id
  * @property string path
- *
- *
+ * @property string created_at
+ * @property string updated_at
+
  * Class MediaTrait
  * @package mhndev\yii2Media\Traits
  */
