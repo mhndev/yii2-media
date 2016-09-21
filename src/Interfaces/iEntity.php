@@ -1,12 +1,15 @@
 <?php
 
 namespace mhndev\yii2Media\Interfaces;
+use yii\db\ActiveRecord;
+
 /**
  * Interface iEntity
  * @package mhndev\yii2Media\Interfaces
  */
 interface iEntity
 {
+
 
     /**
      * @param $mediaMimeType
@@ -22,47 +25,44 @@ interface iEntity
     public function getMedia();
 
     /**
+     * attach media to an entity which takes owner class and owner identifier as arguments
+     *
      * @param $mediaMimeType
      * @param $mediaType
      * @param $mediaPath
+     * @param $owner
+     * @param $owner_id
      * @return mixed
      */
-    public function attachMedia($mediaMimeType, $mediaType, $mediaPath);
+    public function attachMedia($mediaMimeType, $mediaType, $mediaPath, $owner, $owner_id);
+
 
     /**
+     * @param array $media
+     * @param bool $ownerEqualsLoggedInUser
+     */
+    public function attachMultipleMedia(array $media, $ownerEqualsLoggedInUser = true);
+
+
+
+    /**
+     *
+     * attach media to an entity which logged in user is it's owner
+     *
      * @param $mediaMimeType
      * @param $mediaType
      * @param $mediaPath
-     * @return mixed
+     * @return ActiveRecord
      */
-    public function detachMedia($mediaMimeType, $mediaType, $mediaPath);
+    public function attachMediaLoggedInUser($mediaMimeType, $mediaType, $mediaPath);
 
-    /**
-     * @param $mediaId
-     * @return mixed
-     */
-    public function detachMediaById($mediaId);
 
-    /**
-     * @param $mediaMimeType
-     * @param $mediaType
-     * @param $max
-     * @return mixed
-     */
-    public function setMaxMediaCanHave($mediaMimeType, $mediaType, $max);
-
-    /**
-     * @param $mediaMimeType
-     * @param $mediaType
-     * @param $fileSize
-     * @return mixed
-     */
-    public function setMaxMediaFileSizeCanHave($mediaMimeType, $mediaType, $fileSize);
 
     /**
      * @return mixed
      */
     public function detachAllMedia();
+
 
 
     /**
@@ -71,5 +71,8 @@ interface iEntity
      * @return mixed
      */
     public function detachAllMediaByType($mediaMimeType, $mediaType);
+
+
+
 
 }

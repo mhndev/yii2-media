@@ -3,6 +3,9 @@
 return [
     'mediaClass' => \mhndev\yii2Media\Models\Media::class,
 
+
+    'userClass' => \mhndev\yii2Media\Models\Media::class,
+
     'formats' => [
 
 

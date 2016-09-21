@@ -238,7 +238,7 @@ trait EntityTrait
 
         foreach ($array as $value) {
             if (is_array($value)) {
-                $depth = depth($value) + 1;
+                $depth = $this->depth($value) + 1;
 
                 if ($depth > $max_depth) {
                     $max_depth = $depth;
@@ -248,26 +248,6 @@ trait EntityTrait
 
         return $max_depth;
     }
-    /**
-     * @param $mediaMimeType
-     * @param $mediaType
-     * @param $max
-     * @return mixed
-     */
-    public function setMaxMediaCanHave($mediaMimeType, $mediaType, $max)
-    {
 
-    }
-
-    /**
-     * @param $mediaMimeType
-     * @param $mediaType
-     * @param $fileSize
-     * @return mixed
-     */
-    public function setMaxMediaFileSizeCanHave($mediaMimeType, $mediaType, $fileSize)
-    {
-
-    }
 
 }
