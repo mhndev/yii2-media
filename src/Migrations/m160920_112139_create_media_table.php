@@ -21,7 +21,7 @@ class m160920_112139_create_media_table extends Migration
             'mime_type' => $this->string(),
             'file_type' => $this->string(),
             'size' => $this->float(),
-            'default' => $this->boolean(),
+            'default' => $this->boolean()->defaultValue(0),
             'path' => $this->string(),
             'link' => $this->string(),
             'type'=> $this->string(),

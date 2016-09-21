@@ -34,7 +34,7 @@ class Module extends BaseModule implements BootstrapInterface
     public function bootstrap($app)
     {
         if ($app instanceof ConsoleApplication) {
-            $this->controllerNamespace = 'mhndev\yii2Media\commands';
+            $this->controllerNamespace = 'mhndev\yii2Media\Commands';
         }
     }
 }

@@ -5,6 +5,7 @@ namespace mhndev\yii2Media\Traits;
 use mhndev\yii2Media\Models\Media;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class EntityTrait
@@ -132,6 +133,8 @@ trait EntityTrait
      */
     protected function createMany(array $data)
     {
+        $rows = [];
+
         if($this->depth($data) < 2){
             throw new \Exception;
         }
@@ -146,16 +149,18 @@ trait EntityTrait
                 $model->{$key} = $value;
             }
 
+            $model->beforeSave(true);
+
             if(!$model->validate()){
                 break;
             }
 
+            $rows[] = $model->attributes;
+
         }
 
         Yii::$app->db->createCommand()
-            ->batchInsert($modelClassName::tableName(),
-                ['entity','size','entity_id', 'owner', 'owner_id', 'type', 'file_type', 'mime_type', 'path', 'link'],
-                $data)->execute();
+            ->batchInsert($modelClassName::tableName(), $model->attributes() , $rows)->execute();
     }
 
 

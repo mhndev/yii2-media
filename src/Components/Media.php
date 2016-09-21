@@ -16,18 +16,18 @@ class Media
     /**
      * @var array
      */
-    protected static $config;
+    protected static $config = [];
 
     /**
      * @var string
      */
-    protected static $mediaClass;
+    protected static $mediaClass = null;
 
 
     /**
      * @var string
      */
-    protected static $userClass;
+    protected static $userClass = null;
 
 
     /**
@@ -51,13 +51,16 @@ class Media
      */
     public static function config()
     {
-        if(self::$config)
+        if(!empty(self::$config)){
             return self::$config;
+        }
 
         $config = include Yii::$aliases['@config'].DIRECTORY_SEPARATOR.'media.php';
 
         self::$mediaClass = $config['mediaClass'];
         self::$userClass = $config['userClass'];
+
+        return $config;
     }
 
 
@@ -82,7 +85,6 @@ class Media
 
         $return = UploadFile::store($inputName, $type);
 
-
         $data = [];
 
         if($ownerLoggedInUser){
@@ -91,7 +93,7 @@ class Media
                 $item['size'] = (float) $item['size'];
                 $data[] = array_merge($item, [
                     'entity'=>get_class($model),
-                    'entity_id'=>$model->{$model->primaryKey()},
+                    'entity_id'=>$model->{$model->primaryKey()[0]},
                     'owner'=> self::userClass(),
                     'owner_id'=>Yii::$app->user->identity->id,
                     'link'=>null,
@@ -106,7 +108,7 @@ class Media
                 $item['size'] = (float) $item['size'];
                 $data[] = array_merge($item, [
                     'entity'=>get_class($model),
-                    'entity_id'=>$model->{$model->primaryKey()},
+                    'entity_id'=>$model->{$model->primaryKey()[0]},
                     'owner'=> $ownerClass,
                     'owner_id'=>$ownerId,
                     'link'=>null,
