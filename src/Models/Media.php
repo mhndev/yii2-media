@@ -8,10 +8,11 @@ use yii\db\ActiveRecord;
 
 /**
  * Class Media
- * @property string type
+ * @property  string type
  * @property  string mime_type
  * @property  string owner
  * @property  string owner_id
+ * @property  int default
  * @package mhndev\yii2Media
  */
 class Media extends ActiveRecord implements iMedia
@@ -27,33 +28,6 @@ class Media extends ActiveRecord implements iMedia
     }
 
 
-    /**
-     * @param bool $insert
-     * @return bool
-     */
-    public function beforeSave($insert)
-    {
-        if(!empty($this->parent_id)) {
-
-            $parent = $this->getParent();
-
-            if (!empty($parent->path)){
-                $this->path = $parent->path . '' . $parent->id;
-            }
-            else{
-                $this->path = $parent->id;
-            }
-        }
-
-        if (parent::beforeSave($insert)) {
-            if($insert)
-                $this->created_at = date('Y-m-d H:i:s');
-            $this->updated_at = date('Y-m-d H:i:s');
-            return true;
-        } else {
-            return false;
-        }
 
 
-    }
 }

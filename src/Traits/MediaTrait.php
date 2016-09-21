@@ -14,8 +14,6 @@ use yii\db\ActiveRecord;
  */
 trait MediaTrait
 {
-    public static $PRIMARY_KEY = 'id';
-
 
     /**
      * @return mixed
@@ -33,7 +31,7 @@ trait MediaTrait
         /** @var ActiveRecord $entityClass */
         $entityClass = $this->getEntityClass();
 
-        return $entityClass->find()->one([self::$PRIMARY_KEY => $this->entity_id]);
+        return $entityClass->find()->one([ static::primaryKey() => $this->entity_id]);
     }
 
 
@@ -67,4 +65,57 @@ trait MediaTrait
 
         return $this;
     }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if(!empty($this->parent_id)) {
+
+            $parent = $this->getParent();
+
+            if (!empty($parent->path)){
+                $this->path = $parent->path . '' . $parent->id;
+            }
+            else{
+                $this->path = $parent->id;
+            }
+        }
+
+        if (parent::beforeSave($insert)) {
+            if($insert)
+                $this->created_at = date('Y-m-d H:i:s');
+            $this->updated_at = date('Y-m-d H:i:s');
+            return true;
+        } else {
+            return false;
+        }
+
+
+    }
+
+    /**
+     * @return $this
+     */
+    public function markAsDefault()
+    {
+        $this->default = 1;
+        $this->save();
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function unMarkAsDefault()
+    {
+        $this->default = 1;
+        $this->save();
+
+        return $this;
+    }
+
 }

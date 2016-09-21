@@ -30,4 +30,8 @@ interface iMedia
      */
     public function setEntityByTypeAndIdentifier($type, $id);
 
+
+    public function markAsDefault();
+
+    public function unMarkAsDefault();
 }

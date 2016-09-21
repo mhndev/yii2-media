@@ -14,13 +14,16 @@ class m160920_112139_create_media_table extends Migration
     {
         $this->createTable('media', [
             'id' => $this->primaryKey(),
-            'owner'=>$this->string(),
-            'owner_id'=>$this->string(),
-            'entity'=>$this->string(),
-            'entity_id'=>$this->string(),
+            'owner' => $this->string(),
+            'owner_id' => $this->string(),
+            'entity' => $this->string(),
+            'entity_id' => $this->string(),
+            'mime_type' => $this->string(),
+            'file_type' => $this->string(),
+            'size' => $this->float(),
+            'default' => $this->boolean(),
             'path' => $this->string(),
             'link' => $this->string(),
-            'mime_type' => $this->string(),
             'type'=> $this->string(),
             'created_at'=> $this->dateTime(),
             'updated_at'=> $this->dateTime()

@@ -10,14 +10,12 @@ use yii\db\ActiveRecord;
 interface iEntity
 {
 
-
     /**
      * @param $mediaMimeType
      * @param $mediaType
      * @return mixed
      */
     public function getMediaByType($mediaMimeType, $mediaType);
-
 
     /**
      * @return mixed
@@ -43,8 +41,6 @@ interface iEntity
      */
     public function attachMultipleMedia(array $media, $ownerEqualsLoggedInUser = true);
 
-
-
     /**
      *
      * attach media to an entity which logged in user is it's owner
@@ -56,13 +52,10 @@ interface iEntity
      */
     public function attachMediaLoggedInUser($mediaMimeType, $mediaType, $mediaPath);
 
-
-
     /**
      * @return mixed
      */
     public function detachAllMedia();
-
 
 
     /**
@@ -71,8 +64,5 @@ interface iEntity
      * @return mixed
      */
     public function detachAllMediaByType($mediaMimeType, $mediaType);
-
-
-
 
 }
