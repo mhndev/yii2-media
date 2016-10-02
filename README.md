@@ -15,7 +15,7 @@ composer require --prefer-dist mhndev/yii2-media "0.*"
 or add
 
 ```
-"mhndev/yii2-comment": "0.*"
+"mhndev/yii2-media": "0.*"
 ```
 to the require section of your `composer.json` file.
 
