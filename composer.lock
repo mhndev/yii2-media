@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c881acc573aaa912f425487f28672e5c",
-    "content-hash": "f72f56f2edee0c79a79afc0d696c8b55",
+    "hash": "9ec89a18f985e281e9cb56b4dbe6957e",
+    "content-hash": "fbdc5b159d6d9b00b58e63355fbd750d",
     "packages": [
         {
             "name": "bower-asset/jquery",
@@ -152,12 +152,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cebe/markdown.git",
-                "reference": "c30eb5e01fe021cc5bba2f9ee0eeef96d4931166"
+                "reference": "2c368a9329cde1fdaac30b75d74e20b5c85f70a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cebe/markdown/zipball/c30eb5e01fe021cc5bba2f9ee0eeef96d4931166",
-                "reference": "c30eb5e01fe021cc5bba2f9ee0eeef96d4931166",
+                "url": "https://api.github.com/repos/cebe/markdown/zipball/2c368a9329cde1fdaac30b75d74e20b5c85f70a8",
+                "reference": "2c368a9329cde1fdaac30b75d74e20b5c85f70a8",
                 "shasum": ""
             },
             "require": {
@@ -204,7 +204,7 @@
                 "markdown",
                 "markdown-extra"
             ],
-            "time": "2016-09-14 20:40:20"
+            "time": "2016-09-27 13:35:10"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -379,16 +379,16 @@
         },
         {
             "name": "mhndev/media",
-            "version": "dev-develop",
+            "version": "0.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mhndev/media.git",
-                "reference": "3fd4c05c7d0f169c65de4339aa795f79daf47709"
+                "reference": "41b76e42c00f6d48b89995f27739018392f26931"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mhndev/media/zipball/3fd4c05c7d0f169c65de4339aa795f79daf47709",
-                "reference": "3fd4c05c7d0f169c65de4339aa795f79daf47709",
+                "url": "https://api.github.com/repos/mhndev/media/zipball/41b76e42c00f6d48b89995f27739018392f26931",
+                "reference": "41b76e42c00f6d48b89995f27739018392f26931",
                 "shasum": ""
             },
             "require": {
@@ -421,7 +421,7 @@
                 "media",
                 "php file"
             ],
-            "time": "2016-08-04 20:56:01"
+            "time": "2016-09-21 10:53:25"
         },
         {
             "name": "psr/http-message",
@@ -479,12 +479,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "fa2bc223f9a4056bf74e785dad06b37adc5daf1e"
+                "reference": "d4cb037dcb2e4c0f59b213294f6690909ae7f622"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/fa2bc223f9a4056bf74e785dad06b37adc5daf1e",
-                "reference": "fa2bc223f9a4056bf74e785dad06b37adc5daf1e",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/d4cb037dcb2e4c0f59b213294f6690909ae7f622",
+                "reference": "d4cb037dcb2e4c0f59b213294f6690909ae7f622",
                 "shasum": ""
             },
             "require": {
@@ -565,7 +565,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2016-09-19 08:47:56"
+            "time": "2016-09-30 10:10:17"
         },
         {
             "name": "yiisoft/yii2-composer",

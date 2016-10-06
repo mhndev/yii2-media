@@ -1,6 +1,7 @@
 <?php
 namespace mhndev\yii2Media\Traits;
 
+use mhndev\yii2Media\Models\Media;
 use yii\db\ActiveRecord;
 
 /**
@@ -120,6 +121,30 @@ trait MediaTrait
     public function unMarkAsDefault()
     {
         $this->default = 0;
+        $this->save();
+
+        return $this;
+    }
+
+    public function accept()
+    {
+        $this->status   =   Media::STATUS_ACCEPTED;
+        $this->save();
+
+        return $this;
+    }
+
+    public function reject()
+    {
+        $this->status   =   Media::STATUS_REJECTED;
+        $this->save();
+
+        return $this;
+    }
+
+    public function softDelete()
+    {
+        $this->status   =   Media::STATUS_DELETED;
         $this->save();
 
         return $this;
