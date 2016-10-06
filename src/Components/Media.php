@@ -2,10 +2,11 @@
 
 namespace mhndev\yii2Media\Components;
 
+use Yii;
 use mhndev\media\UploadFile;
 use mhndev\yii2Media\Interfaces\iEntity;
 use mhndev\yii2Media\Interfaces\iMedia;
-use Yii;
+use mhndev\yii2Media\Models\Media as MediaModel;
 
 /**
  * Class Media
@@ -147,5 +148,14 @@ class Media
         return $media->markAsDefault();
     }
 
+
+    /**
+     * @param $entity
+     * @param $entities_id
+     */
+    public static function deleteBatch($entity, $entities_id)
+    {
+        MediaModel::deleteAll([['in', 'entity_id',$entities_id], ['entity'=>$entity]]);
+    }
 
 }

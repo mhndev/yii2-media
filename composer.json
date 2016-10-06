@@ -8,6 +8,10 @@
     {
       "name": "majid abdolhosseini",
       "email": "majid8911303@gmail.com"
+    },
+    {
+      "name": "Mohammad Moein Hosseini Manesh",
+      "email":  "moein7tl@gmail.com"
     }
   ],
   "require": {
@@ -19,6 +23,24 @@
     "psr-4": {
       "mhndev\\yii2Media\\": "src/"
     }
+  },
+
+  "scripts":  {
+
+    "post-package-install": [
+      "@runMigrations"
+    ],
+    "post-package-update":  [
+      "@runMigrations"
+    ],
+    "pre-package-uninstall":  [
+      "@rollbackMigrations"
+    ],
+    "post-autoload-dump": [
+      "@runMigrations"
+    ],
+    "runMigrations":  "",
+    "rollbackMigrations": ""
   },
 
   "minimum-stability": "dev"
