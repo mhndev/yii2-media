@@ -39,8 +39,8 @@
     "post-autoload-dump": [
       "@runMigrations"
     ],
-    "runMigrations":  "",
-    "rollbackMigrations": ""
+    "runMigrations":  "php ./../../yii migrate/up --interactive --migrationPath=@app/vendor/mhndev/yii2-media/src/Migrations",
+    "rollbackMigrations": "php ./../../yii migrate/down 2 --interactive --migrationPath=@app/vendor/mhndev/yii2-media/src/Migrations"
   },
 
   "minimum-stability": "dev"
