@@ -6,7 +6,7 @@
  * Time: 4:41 PM
  */
 
-namespace mhndev\Actions;
+namespace mhndev\yii2Media\Actions;
 
 use yii\rest\Action;
 use mhndev\yii2Media\Models\Media;
