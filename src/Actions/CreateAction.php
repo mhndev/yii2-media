@@ -8,8 +8,9 @@
 
 namespace mhndev\yii2Media\Actions;
 
+use Yii;
 use yii\rest\Action;
-use mhndev\yii2Media\Models\Media;
+use mhndev\yii2Media\Components\Media;
 
 class CreateAction extends Action {
 
@@ -19,7 +20,7 @@ class CreateAction extends Action {
         
         $entity     =   $this->modelClass;
         $model      =   $entity::findOne($data['entity_id']);
-        
-        return ['records'=>Media::storeAndAttach('media', $data['type'], $model)];
+
+        return ['records'=> Media::storeAndAttach('media', $data['type'], $model)];
     }
 }

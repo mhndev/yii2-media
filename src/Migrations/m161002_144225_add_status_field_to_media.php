@@ -1,6 +1,8 @@
 <?php
 
 use yii\db\Migration;
+use mhndev\yii2Media\Models\Media;
+
 
 class m161002_144225_add_status_field_to_media extends Migration
 {
