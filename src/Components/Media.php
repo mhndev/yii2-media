@@ -56,7 +56,11 @@ class Media
             return self::$config;
         }
 
-        $config = include Yii::$aliases['@config'].DIRECTORY_SEPARATOR.'media.php';
+        if (Yii::$app instanceof \yii\console\Application) {
+            $config = include Yii::$aliases['@config'].DIRECTORY_SEPARATOR.'media_console.php';
+        } else {
+            $config = include Yii::$aliases['@config'].DIRECTORY_SEPARATOR.'media_web.php';
+        }
 
         self::$mediaClass = $config['mediaClass'];
         self::$userClass = $config['userClass'];
@@ -117,8 +121,6 @@ class Media
                 ]);
             }
         }
-
-
 
         /** @var iEntity $model */
         return $model->attachMultipleMedia($data, false);
