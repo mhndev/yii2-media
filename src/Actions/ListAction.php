@@ -6,7 +6,7 @@
  * Time: 4:40 PM
  */
 
-namespace mhndev\Actions;
+namespace mhndev\yii2Media\Actions;
 
 use yii\rest\Action;
 use yii\data\Pagination;
